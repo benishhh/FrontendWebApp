@@ -2,6 +2,7 @@ import express, {NextFunction, Request, Response} from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import userRouter from "./routes/user";
 dotenv.config();
 
 
@@ -22,8 +23,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // app.use("/api/songs", require("./routes/songRoutes"));
 // app.use("/api/authors", require("./routes/authorRoutes"));
 // app.use("/api/categories", require("./routes/categoriesRoutes"));
-// app.use("/api/playlists", require("./routes/playlistRoutes"));
-//
+app.use("", userRouter);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server');

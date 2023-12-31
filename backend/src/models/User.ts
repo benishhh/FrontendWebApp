@@ -1,5 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
+
 interface IUser extends Document {
     username: string;
     email: string;
