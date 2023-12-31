@@ -2,9 +2,13 @@ import { Request, Response, NextFunction } from "express";
 import bcrypt from 'bcrypt';
 import User from '../models/User';
 import {validationResult} from "express-validator";
+import dotenv from "dotenv";
+dotenv.config();
+import jwt from 'jsonwebtoken';
+import {IUser} from '../models/User'
 
 const userController = {
-    registerUser: async (req: Request, res: Response) => {
+    register: async (req: Request, res: Response) => {
         const { username, email, password } = req.body;
         const errors = validationResult(req);
 
@@ -28,7 +32,9 @@ const userController = {
 
             res.status(201).json({
                 success: true,
-                data: newUser,
+                data: {
+                    newUser,
+                },
             });
         } catch (error) {
             console.error(error);
@@ -41,6 +47,69 @@ const userController = {
             });
         }
     },
+
+
+    login: async (req: Request, res: Response, next: NextFunction) => {
+        const { email, password } = req.body;
+
+        try {
+            const user = await User.findOne({ email });
+            if(!user) {
+                return res.status(401).json({
+                    success: false,
+                    error: {
+                        code: 401,
+                        message: 'Invalid email or password',
+                    },
+                });
+            }
+
+            const passwordMatch = await bcrypt.compare(password, user.password);
+            if (!passwordMatch) {
+                return res.status(401).json({
+                    success: false,
+                    error: {
+                        code: 401,
+                        message: 'Invalid email or password',
+                    },
+                });
+            }
+
+            const token = generateJWTToken(user);
+            res.status(200).json({
+                success: true,
+                data: {
+                    user,
+                    token,
+                },
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                success: false,
+                error: {
+                    code: 500,
+                    message: 'Internal Server Error',
+                },
+            });
+        }
+
+
+    }
 }
+
+const generateJWTToken = (user: IUser) => {
+    const secretKey = String(process.env['JWTSecretKey']);
+    const expiresIn = '5h';
+
+    return jwt.sign({ user: {
+            _id: user._id,
+            username: user.username,
+            isAdmin: user.isAdmin,
+            themeMode: user.themeMode,
+            }},
+        secretKey,
+        { expiresIn });
+};
 
 export default userController;
