@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-interface IBrand extends Document {
+export interface IBrand extends Document {
     name: string;
     carModels: string[];
 }

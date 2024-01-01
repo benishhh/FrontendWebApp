@@ -30,7 +30,7 @@ const userController = {
                 password: hashedPassword,
             });
 
-            res.status(201).json({
+            return res.status(201).json({
                 success: true,
                 data: {
                     newUser,
@@ -38,7 +38,7 @@ const userController = {
             });
         } catch (error) {
             console.error(error);
-            res.status(500).json({
+            return res.status(500).json({
                 success: false,
                 error: {
                     code: 500,
@@ -76,7 +76,7 @@ const userController = {
             }
 
             const token = generateJWTToken(user);
-            res.status(200).json({
+            return res.status(200).json({
                 success: true,
                 data: {
                     user,
@@ -85,7 +85,7 @@ const userController = {
             });
         } catch (error) {
             console.error(error);
-            res.status(500).json({
+            return res.status(500).json({
                 success: false,
                 error: {
                     code: 500,

@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRouter from "./routes/user";
+import brandRouter from "./routes/brand";
 dotenv.config();
 
 
@@ -24,6 +25,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // app.use("/api/authors", require("./routes/authorRoutes"));
 // app.use("/api/categories", require("./routes/categoriesRoutes"));
 app.use("", userRouter);
+app.use("/brands", brandRouter);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server');
