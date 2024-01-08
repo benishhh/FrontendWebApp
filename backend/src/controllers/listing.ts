@@ -123,9 +123,28 @@ const listingController = {
         }
     },
 
+    //
     getAllListings: async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const listings = await Listing.find();
+            let filters: any = {};
+
+            if (req.query.yearFrom && req.query.yearTo) {
+                filters['car.year'] = {$gte: parseInt(req.query.yearFrom as string), $lte: parseInt(req.query.yearTo as string)};
+            }
+
+            if (req.query.brandId) {
+                filters['car.brand'] = req.query.brandId as string;
+            }
+
+            if (req.query.priceFrom && req.query.priceTo) {
+                filters['price'] = {$gte: parseFloat(req.query.priceFrom as string), $lte: parseFloat(req.query.priceTo as string)};
+            }
+
+            if (req.query.carModel) {
+                filters['car.carModel'] = {$regex: new RegExp(req.query.carModel as string, 'i')};
+            }
+
+            const listings = await Listing.find(filters);
 
             res.status(200).json({
                 success: true,
@@ -146,4 +165,4 @@ const listingController = {
     }
 }
 
-export default listingController;
+    export default listingController;
