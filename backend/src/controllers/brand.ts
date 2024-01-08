@@ -3,6 +3,7 @@ import Brand from '../models/Brand'
 import {validationResult} from "express-validator";
 import {IBrand} from '../models/Brand'
 import User from "../models/User";
+import mongoose from "mongoose";
 
 const brandController = {
 
@@ -27,6 +28,51 @@ const brandController = {
             });
         }
     },
+
+    getBrand: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const brandId = req.params.id;
+
+            if (!mongoose.Types.ObjectId.isValid(brandId)) {
+                return res.status(400).json({
+                    success: false,
+                    error: {
+                        code: 400,
+                        message: 'Invalid Brand ID',
+                    },
+                });
+            }
+
+            const brand = await Brand.findById(brandId);
+
+            if (!brand) {
+                return res.status(404).json({
+                    success: false,
+                    error: {
+                        code: 404,
+                        message: 'Brand not found',
+                    },
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                data: {
+                    brand,
+                },
+            });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                success: false,
+                error: {
+                    code: 500,
+                    message: 'Internal Server Error',
+                },
+            });
+        }
+    },
+
 
     addBrand: async (req: Request, res: Response, next: NextFunction) => {
         const { name } = req.body;

@@ -1,5 +1,5 @@
 import express from 'express';
-import { body } from 'express-validator';
+import {body, param} from 'express-validator';
 import User from '../models/User';
 import brand from '../controllers/brand';
 import brandController from "../controllers/brand";
@@ -7,6 +7,8 @@ import brandController from "../controllers/brand";
 const brandRouter = express.Router();
 
 brandRouter.get('', brandController.getBrands);
+
+brandRouter.get('/:id', brandController.getBrand);
 
 brandRouter.post('',
     [
