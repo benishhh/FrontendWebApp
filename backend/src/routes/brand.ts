@@ -10,7 +10,7 @@ brandRouter.get('', brandController.getBrands);
 
 brandRouter.post('',
     [
-        body('name').not().isEmpty().withMessage("name is mandatory")
+        body('name').notEmpty().withMessage("name is mandatory")
             .isString().withMessage("name has to be string")
     ],
     brandController.addBrand

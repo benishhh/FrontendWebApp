@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 type EngineType = "diesel" | "gasoline" | "electric" | "hybrid";
 
-interface ICar extends Document {
+export interface ICar extends Document {
     brand: mongoose.Types.ObjectId;
     carModel: string
     year: number;

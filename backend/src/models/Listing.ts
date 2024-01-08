@@ -1,10 +1,19 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema, Types } from 'mongoose';
 
-interface IListing extends Document {
+export interface IListing extends Document {
     title: string;
     description: string;
-    price: number;
-    car: mongoose.Types.ObjectId;
+    car: {
+        brand: mongoose.Types.ObjectId;
+        carModel: string;
+        year: number;
+        mileage: number;
+        engineType: "diesel" | "gasoline" | "electric" | "hybrid";
+        engineSize: number;
+        price: number;
+        specifications: string;
+        description: string;
+    };
     seller: mongoose.Types.ObjectId;
     likedByUsers: mongoose.Types.ObjectId[];
 }
@@ -12,8 +21,17 @@ interface IListing extends Document {
 const listingSchema: Schema<IListing> = new Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
-    price: { type: Number, required: true },
-    car: { type: mongoose.Schema.ObjectId, ref: 'Car', required: true},
+    car: {
+        brand: { type: mongoose.Schema.ObjectId, ref: 'Brand', required: true },
+        carModel: { type: String, required: true },
+        year: { type: Number, required: true },
+        mileage: { type: Number, required: true },
+        engineType: { type: String, enum: ["diesel", "gasoline", "electric", "hybrid"], required: true },
+        engineSize: { type: Number, required: true },
+        price: { type: Number, required: true },
+        specifications: { type: String, required: true },
+        description: { type: String, required: true },
+    },
     seller: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
     likedByUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 });
