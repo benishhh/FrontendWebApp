@@ -7,7 +7,7 @@ export interface IUser extends Document {
     password: string;
     isAdmin: boolean;
     listings: mongoose.Types.ObjectId[];
-    liked: mongoose.Types.ObjectId[];
+    likedListings: mongoose.Types.ObjectId[];
     themeMode: 'light' | 'dark';
 }
 
@@ -17,7 +17,7 @@ const userSchema: Schema<IUser> = new Schema({
     password: { type: String, required: true },
     isAdmin: { type: Boolean, required: true, default: false },
     listings: [{ type: mongoose.Schema.ObjectId, ref: 'Listing' }],
-    liked: [{ type: mongoose.Schema.ObjectId, ref: 'Listing' }],
+    likedListings: [{ type: mongoose.Schema.ObjectId, ref: 'Listing' }],
     themeMode: { type: String, enum: ['light', 'dark'], default: 'light' },
 });
 

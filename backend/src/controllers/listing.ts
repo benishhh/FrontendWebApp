@@ -3,6 +3,8 @@ import {validationResult} from "express-validator";
 import {IListing} from '../models/Listing'
 import Listing from "../models/Listing";
 import Brand from '../models/Brand';
+import User from "../models/User";
+import mongoose from "mongoose";
 
 const listingController = {
     addListing: async (req: Request, res: Response, next: NextFunction) => {
@@ -162,7 +164,73 @@ const listingController = {
                 }
             });
         }
-    }
+    },
+
+    addToFavorites: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const listingId = req.params.id;
+            const userId = (req as any).user._id;
+            console.log(userId);
+            console.log(listingId);
+
+            const user = await User.findById(userId);
+            if (user?.likedListings.includes(new mongoose.Types.ObjectId(listingId))) {
+                return res.status(400).json({
+                    success: false,
+                    error: {
+                        code: 400,
+                        message: 'Listing is already in favorites',
+                    },
+                });
+            }
+            user?.likedListings.push(new mongoose.Types.ObjectId(listingId));
+            await user?.save();
+
+            await Listing.findByIdAndUpdate(listingId, { $push: { likedByUsers: userId } });
+
+            return res.status(200).json({
+                success: true,
+                data: {
+                    message: 'Listing added to favorites',
+                },
+            });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                success: false,
+                error: {
+                    code: 500,
+                    message: 'Internal Server Error',
+                },
+            });
+        }
+    },
+
+    removeFromFavorites: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const listingId = req.params.listingId;
+            const userId = (req as any).user._id;
+
+            await User.findByIdAndUpdate(userId, { $pull: { favoriteListings: listingId } });
+            await Listing.findByIdAndUpdate(listingId, { $pull: { likedByUsers: userId } });
+
+            return res.status(200).json({
+                success: true,
+                data: {
+                    message: 'Listing removed from favorites',
+                },
+            });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                success: false,
+                error: {
+                    code: 500,
+                    message: 'Internal Server Error',
+                },
+            });
+        }
+    },
 }
 
     export default listingController;

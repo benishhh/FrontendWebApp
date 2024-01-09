@@ -4,6 +4,7 @@ import Listing from '../models/Listing';
 import brand from '../controllers/brand';
 import listingController from "../controllers/listing";
 import mongoose from "mongoose";
+import authMiddleware from "../middleware/authMiddleware";
 
 const listingRouter = express.Router();
 
@@ -43,4 +44,6 @@ listingRouter.post('',
     listingController.addListing);
 
 listingRouter.delete('/:id', listingController.deleteListing)
+
+listingRouter.post('/:id/likes', authMiddleware, listingController.addToFavorites);
 export default listingRouter;
