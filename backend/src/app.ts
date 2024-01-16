@@ -16,7 +16,7 @@ app.use(express.json());
 
 //  <----------- Middlewares ----------->
 app.use((req: Request, res: Response, next: NextFunction) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
@@ -25,9 +25,9 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // app.use("/api/songs", require("./routes/songRoutes"));
 // app.use("/api/authors", require("./routes/authorRoutes"));
 // app.use("/api/categories", require("./routes/categoriesRoutes"));
-app.use("", userRouter);
-app.use("/brands", brandRouter);
-app.use("/listings", listingRouter)
+app.use("/api", userRouter);
+app.use("/api/brands", brandRouter);
+app.use("/api/listings", listingRouter)
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server');
