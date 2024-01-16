@@ -42,7 +42,7 @@ listingRouter.post('',
     authMiddleware,
     listingController.addListing);
 
-listingRouter.delete('/:id', authMiddleware, listingController.deleteListing)
+listingRouter.delete('/:id/likes', authMiddleware, listingController.deleteListing)
 
 listingRouter.post('/:id/likes', authMiddleware, listingController.addToFavorites);
 export default listingRouter;

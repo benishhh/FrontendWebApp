@@ -39,6 +39,7 @@ export const LoginPage = () => {
                 const response = await loginUser(values);
                 // Zapisanie tokena JWT
                 sessionStorage.setItem('authToken', response.data.token);
+                sessionStorage.setItem('currentUserId', response.data.user._id);
                 navigate('/moto/profile'); // Przekierowanie do strony profilu
             } catch (error) {
                 alert('Nieprawidłowy email lub hasło');

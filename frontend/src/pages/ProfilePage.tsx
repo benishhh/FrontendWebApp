@@ -20,6 +20,7 @@ export const ProfilePage = () => {
 
     const handleLogout = () => {
         sessionStorage.removeItem('authToken'); // Usuwanie tokena z sessionStorage
+        sessionStorage.removeItem('currentUserId'); // Usuwanie tokena z sessionStorage
         localStorage.removeItem('isLoggedIn');
 
         navigate('/moto/login');
