@@ -26,5 +26,7 @@ userRouter.post('/login', userController.login);
 
 userRouter.get('/user', authMiddleware, userController.getLoggedInUser);
 
+userRouter.get("/user/favourites", authMiddleware, userController.getUserFavouriteListings);
+
 
 export default userRouter;

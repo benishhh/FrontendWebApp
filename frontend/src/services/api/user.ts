@@ -38,4 +38,26 @@ const getUserProfile = async (): Promise<UserProfileResponse> => {
     }
 };
 
-export { getUserProfile };
+const getUserFavorites = async () => {
+    const API_URL = "http://localhost:8080/api/user/favorites"; // Zmień na odpowiedni URL backendu
+    const token = sessionStorage.getItem('authToken'); // Pobieranie tokena z sessionStorage
+
+    try {
+        const response = await fetch(API_URL, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Nie udało się pobrać ulubionych listingów');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching user favorites:', error);
+        throw error;
+    }
+};
+
+export { getUserProfile, getUserFavorites };
