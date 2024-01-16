@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { TextInput, PasswordInput, Button, Paper, Title, Container } from '@mantine/core';
 import {useNavigate} from "react-router-dom";
+import loginUser from "../services/api/login";
 
 // Schemat walidacji dla formularza logowania
 const validationSchema = yup.object({
@@ -20,6 +21,7 @@ export const LoginPage = () => {
             password: '',
         },
         validationSchema: validationSchema,
+        //localstorage wersja
         onSubmit: (values) => {
             const storedData = localStorage.getItem('userData');
             const userData = storedData ? JSON.parse(storedData) : null;
@@ -32,6 +34,17 @@ export const LoginPage = () => {
                 alert('Nieprawidłowy email lub hasło');
             }
         },
+        // onSubmit: async (values) => {
+        //     try {
+        //         const response = await loginUser(values);
+        //         // Zapisanie tokena JWT
+        //         sessionStorage.setItem('authToken', response.data.token);
+        //         navigate('/moto/profile'); // Przekierowanie do strony profilu
+        //     } catch (error) {
+        //         alert('Nieprawidłowy email lub hasło');
+        //     }
+        // },
+
     });
 
     return (

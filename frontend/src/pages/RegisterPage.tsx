@@ -40,7 +40,7 @@ export const RegisterPage = () => {
             try {
                 await registerUser(userData); // Wywołanie serwisu rejestracji
                 registerSuccessfulNotification();
-                navigate('/moto/login'); // Przekierowanie po pomyślnej rejestracji
+               // navigate('/moto/login'); // Przekierowanie po pomyślnej rejestracji
             } catch (error) {
                 registerErrorNotification(); // Obsługa błędów
             }
