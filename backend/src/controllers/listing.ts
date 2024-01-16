@@ -30,9 +30,10 @@ const listingController = {
             carEngineType,
             carEngineSize,
             carPrice,
-            sellerId,
             brandId,
         } = req.body;
+
+        const sellerId = (req as any).user._id;
 
         try {
             // Sprawdź czy Brand istnieje

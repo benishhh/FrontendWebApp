@@ -26,12 +26,6 @@ listingRouter.post('',
         }),
         body('carEngineSize', 'Car Engine Size is invalid').notEmpty().isFloat({ min: 0 }),
         body('carPrice', 'Car Price is invalid').notEmpty().isFloat({ min: 0 }),
-        body('sellerId', 'Seller ID is invalid').notEmpty().isString().custom(value => {
-            if (!mongoose.Types.ObjectId.isValid(value)) {
-                throw new Error('Invalid Seller ID');
-            }
-            return true;
-        }),
         body('brandId', 'Brand ID is invalid').notEmpty().isString().custom(value => {
             if (!mongoose.Types.ObjectId.isValid(value)) {
                 throw new Error('Invalid Brand ID');

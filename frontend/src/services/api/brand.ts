@@ -1,11 +1,21 @@
-export interface Brand {
-    name: string;
-    carModels: string[];
+import {bool} from "yup";
+
+export interface brandResponse {
+    success: boolean;
+    data: {
+        brands: [{
+            _id: string,
+            name: string,
+            carModels: string[]
+        }]
+    }
 }
 
-const API_URL = 'http://localhost:8080/api/brands'; // Zaktualizuj URL w razie potrzeby
 
-const getBrands = async (): Promise<Brand[]> => {
+
+const API_URL = 'http://localhost:8080/api/brands';
+
+const getBrands = async (): Promise<brandResponse> => {
     try {
         const response = await fetch(API_URL);
 

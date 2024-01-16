@@ -1,3 +1,4 @@
+import {ListingFormData} from "../../pages/CarAddNew";
 
 export interface Brand {
     _id: string;
@@ -35,6 +36,11 @@ export interface ListingResponse {
     data: {
         listings: Listing[];
     };
+}
+
+export interface ListingToAdd {
+    title: string;
+    description: string;
 }
 
 const getListings = async (): Promise<ListingResponse> => {
@@ -92,5 +98,34 @@ const removeFromFavorites = async (listingId: string): Promise<any> => {
 
     return await response.json();
 };
+
+// services/listingService.js
+
+export const addListing = async (listingData: ListingFormData) => {
+    const API_URL = 'http://localhost:8080/api/listings'; // Zmień na odpowiedni URL backendu
+    const token = sessionStorage.getItem('authToken'); // Pobieranie tokena z sessionStorage
+
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Upewnij się, że token jest dodawany do nagłówka, jeśli jest wymagany
+            },
+            body: JSON.stringify(listingData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Nie udało się dodać ogłoszenia');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error adding listing:', error);
+        throw error;
+    }
+};
+
 
 export { addToFavorites, removeFromFavorites, getListings };
