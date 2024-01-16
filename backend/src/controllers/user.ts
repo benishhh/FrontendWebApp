@@ -93,9 +93,39 @@ const userController = {
                 },
             });
         }
+    },
 
+    getLoggedInUser: async (req: Request, res: Response) => {
+        try {
+            // Używamy informacji z req.user, które zostały dodane przez middleware autentykacji
+            const user = await User.findById((req as any).user._id).select('-password'); // Nie zwracamy hasła
 
-    }
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    error: {
+                        code: 404,
+                        message: 'User not found',
+                    }
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                data: user
+            });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                success: false,
+                error: {
+                    code: 500,
+                    message: 'Internal Server Error',
+                }
+            });
+        }
+    },
+
 }
 
 const generateJWTToken = (user: IUser) => {

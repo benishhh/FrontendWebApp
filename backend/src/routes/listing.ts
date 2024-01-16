@@ -26,8 +26,6 @@ listingRouter.post('',
         }),
         body('carEngineSize', 'Car Engine Size is invalid').notEmpty().isFloat({ min: 0 }),
         body('carPrice', 'Car Price is invalid').notEmpty().isFloat({ min: 0 }),
-        body('carSpecifications', 'Car Specifications is invalid').notEmpty().isString(),
-        body('carDescription', 'Car Description is invalid').isString(),
         body('sellerId', 'Seller ID is invalid').notEmpty().isString().custom(value => {
             if (!mongoose.Types.ObjectId.isValid(value)) {
                 throw new Error('Invalid Seller ID');
@@ -41,9 +39,10 @@ listingRouter.post('',
             return true;
         })
     ],
+    authMiddleware,
     listingController.addListing);
 
-listingRouter.delete('/:id', listingController.deleteListing)
+listingRouter.delete('/:id', authMiddleware, listingController.deleteListing)
 
 listingRouter.post('/:id/likes', authMiddleware, listingController.addToFavorites);
 export default listingRouter;

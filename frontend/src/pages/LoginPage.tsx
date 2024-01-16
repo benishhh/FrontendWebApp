@@ -22,28 +22,28 @@ export const LoginPage = () => {
         },
         validationSchema: validationSchema,
         //localstorage wersja
-        onSubmit: (values) => {
-            const storedData = localStorage.getItem('userData');
-            const userData = storedData ? JSON.parse(storedData) : null;
-
-            if (userData && values.email === userData.email && values.password === userData.password) {
-                // Zapisanie, że użytkownik jest zalogowany
-                localStorage.setItem('isLoggedIn', 'true');
-                navigate('/moto/profile'); // Przekierowanie do strony profilu
-            } else {
-                alert('Nieprawidłowy email lub hasło');
-            }
-        },
-        // onSubmit: async (values) => {
-        //     try {
-        //         const response = await loginUser(values);
-        //         // Zapisanie tokena JWT
-        //         sessionStorage.setItem('authToken', response.data.token);
+        // onSubmit: (values) => {
+        //     const storedData = localStorage.getItem('userData');
+        //     const userData = storedData ? JSON.parse(storedData) : null;
+        //
+        //     if (userData && values.email === userData.email && values.password === userData.password) {
+        //         // Zapisanie, że użytkownik jest zalogowany
+        //         localStorage.setItem('isLoggedIn', 'true');
         //         navigate('/moto/profile'); // Przekierowanie do strony profilu
-        //     } catch (error) {
+        //     } else {
         //         alert('Nieprawidłowy email lub hasło');
         //     }
         // },
+        onSubmit: async (values) => {
+            try {
+                const response = await loginUser(values);
+                // Zapisanie tokena JWT
+                sessionStorage.setItem('authToken', response.data.token);
+                navigate('/moto/profile'); // Przekierowanie do strony profilu
+            } catch (error) {
+                alert('Nieprawidłowy email lub hasło');
+            }
+        },
 
     });
 

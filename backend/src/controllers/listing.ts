@@ -30,8 +30,6 @@ const listingController = {
             carEngineType,
             carEngineSize,
             carPrice,
-            carSpecifications,
-            carDescription,
             sellerId,
             brandId,
         } = req.body;
@@ -61,8 +59,6 @@ const listingController = {
                     engineType: carEngineType,
                     engineSize: carEngineSize,
                     price: carPrice,
-                    specifications: carSpecifications,
-                    description: carDescription,
                 },
                 seller: sellerId,
                 likedByUsers: [],
@@ -146,7 +142,10 @@ const listingController = {
                 filters['car.carModel'] = {$regex: new RegExp(req.query.carModel as string, 'i')};
             }
 
-            const listings = await Listing.find(filters);
+            const listings = await Listing.find(filters)
+                .populate('car.brand', 'name')  // Zastąpienie ID marki samochodu nazwą marki
+                .populate('seller', 'username') // Zastąpienie ID sprzedawcy jego nazwą użytkownika
+                .populate('likedByUsers', 'username'); // Zastąpienie ID użytkowników, którzy polubili, ich nazwami użytkowników
 
             res.status(200).json({
                 success: true,

@@ -11,8 +11,6 @@ export interface IListing extends Document {
         engineType: "diesel" | "gasoline" | "electric" | "hybrid";
         engineSize: number;
         price: number;
-        specifications: string;
-        description: string;
     };
     seller: mongoose.Types.ObjectId;
     likedByUsers: mongoose.Types.ObjectId[];
@@ -29,8 +27,6 @@ const listingSchema: Schema<IListing> = new Schema({
         engineType: { type: String, enum: ["diesel", "gasoline", "electric", "hybrid"], required: true },
         engineSize: { type: Number, required: true },
         price: { type: Number, required: true },
-        specifications: { type: String, required: true },
-        description: { type: String, required: true },
     },
     seller: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
     likedByUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],

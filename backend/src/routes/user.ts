@@ -2,6 +2,8 @@ import express from 'express';
 import { body } from 'express-validator';
 import User from '../models/User';
 import userController from '../controllers/user';
+import authMiddleware from "../middleware/authMiddleware";
+
 
 const userRouter = express.Router();
 
@@ -20,7 +22,9 @@ userRouter.post('/register',
     userController.register
     )
 
-userRouter.post('/login', userController.login)
+userRouter.post('/login', userController.login);
+
+userRouter.get('/user', authMiddleware, userController.getLoggedInUser);
 
 
 export default userRouter;
