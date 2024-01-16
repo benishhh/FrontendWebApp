@@ -1,22 +1,66 @@
-// ProfilePage.js
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Button } from '@mantine/core';
-import {getUserProfile, UserProfile, UserProfileResponse} from "../services/api/user"; // Importowanie nowo utworzonego serwisu
+import {getUserFavoriteListings, getUserProfile, UserProfile, UserProfileResponse} from "../services/api/user";
+import {addToFavorites, getListings, Listing, removeFromFavorites} from "../services/api/listing";
+import {CarListItem, CarListItemListing} from "../hooks/CarListItem";
 
 export const ProfilePage = () => {
     const navigate = useNavigate();
-    const [userData, setUserData] = useState<UserProfile | null>(null); // Użycie typu UserProfile
+    const [userData, setUserData] = useState<UserProfile | null>(null);
+    const [listings, setListings] = useState<CarListItemListing[]>([]);
+    const currentUserId = sessionStorage.getItem('currentUserId');
 
     useEffect(() => {
         getUserProfile().then(response => {
-            setUserData(response.data);
+            if (response.success) {
+                setUserData(response.data);
+            }
         }).catch(error => {
-            console.error(error);
-            // Obsługa błędów, np. przekierowanie na stronę logowania
+            console.error('Błąd podczas pobierania danych usera:', error);
+        })
+
+        getUserFavoriteListings().then(response => {
+            if (response.success) {
+                const newCarListItemListings = response.data.listings.map(listing =>{
+                    return {
+                        _id: listing._id,
+                        title: listing.title,
+                        brand: listing.car.brand.name,
+                        model: listing.car.carModel,
+                        year: listing.car.year,
+                        mileage: listing.car.mileage,
+                        price: listing.car.price,
+                        isFavorited: listing.likedByUsers.some(user => user._id === currentUserId)
+                    }
+                })
+                setListings(newCarListItemListings);
+            }
+        }).catch(error => {
+            console.error('Błąd podczas pobierania listingów:', error);
         });
-    }, []);
+    }, [currentUserId]);
+
+    const toggleFavorite = async (listingId: string) => {
+        try {
+            const listingToUpdate = listings.find(listing => listing._id === listingId);
+            if (listingToUpdate) {
+                if (listingToUpdate.isFavorited) {
+                    await removeFromFavorites(listingId);
+                } else {
+                    await addToFavorites(listingId);
+                }
+
+                const updatedListings = listings.map(listing =>
+                    listing._id === listingId ? {...listing, isFavorited: !listing.isFavorited} : listing
+                );
+
+                setListings(updatedListings);
+            }
+        } catch (error) {
+            console.error('Błąd przy zmianie stanu ulubionych:', error);
+        }
+    };
 
     const handleLogout = () => {
         sessionStorage.removeItem('authToken'); // Usuwanie tokena z sessionStorage
@@ -26,22 +70,30 @@ export const ProfilePage = () => {
         navigate('/moto/login');
     };
 
-    // ... reszta kodu, np. odczytywanie ulubionych ogłoszeń ...
-
     if (!userData) {
-        return <p>Ładowanie danych użytkownika...</p>; // Możesz wyświetlić komunikat o ładowaniu
+        return <p>Ładowanie danych użytkownika...</p>;
     }
 
     return (
         <div>
-            {/* Reszta komponentu, np. wyświetlanie danych użytkownika */}
             <h1>Profil Użytkownika</h1>
             <p>Nazwa użytkownika: {userData.username}</p>
             <p>Email: {userData.email}</p>
             <Button onClick={handleLogout} variant={"filled"} color={"gray"}>Wyloguj się</Button>
 
-            {/* Wyświetlanie ulubionych ogłoszeń, etc. */}
-            {/* ... */}
+            {/* Wyświetlanie ulubionych ogłoszeń*/}
+            <h2>Ulubione Listingi</h2>
+            {listings.length > 0 ? (
+                listings.map(listing => (
+                    <CarListItem
+                        key={listing._id}
+                        {...listing}
+                        onToggleFavorite={toggleFavorite}
+                    />
+                ))
+            ) : (
+                <p>Nie masz ulubionych ogłoszeń.</p>
+            )}
         </div>
     );
 };

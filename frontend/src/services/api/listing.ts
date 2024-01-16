@@ -10,6 +10,7 @@ export interface User {
 }
 
 export interface CarDetails {
+    _id: string,
     brand: Brand;
     carModel: string;
     year: number;

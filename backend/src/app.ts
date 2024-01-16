@@ -21,18 +21,9 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
-// app.use("/api/users", require("./routes/userRoutes"));
-// app.use("/api/songs", require("./routes/songRoutes"));
-// app.use("/api/authors", require("./routes/authorRoutes"));
-// app.use("/api/categories", require("./routes/categoriesRoutes"));
 app.use("/api", userRouter);
 app.use("/api/brands", brandRouter);
 app.use("/api/listings", listingRouter)
-
-app.get('/', (req: Request, res: Response) => {
-    res.send('Express + TypeScript Server');
-});
-
 
 //  <----------- Connecting to the database and starting the app to listen ----------->
 const MONGODB_URI = process.env["MONGODB_URI"];
