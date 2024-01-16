@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { Button } from '@mantine/core';
+import {Button, SimpleGrid} from '@mantine/core';
 import {getUserFavoriteListings, getUserProfile, UserProfile, UserProfileResponse} from "../services/api/user";
 import {addToFavorites, getListings, Listing, removeFromFavorites} from "../services/api/listing";
 import {CarListItem, CarListItemListing} from "../hooks/CarListItem";
@@ -10,6 +10,7 @@ export const ProfilePage = () => {
     const [userData, setUserData] = useState<UserProfile | null>(null);
     const [listings, setListings] = useState<CarListItemListing[]>([]);
     const currentUserId = sessionStorage.getItem('currentUserId');
+    const [userListings, setUserListings] = useState([]);
 
     useEffect(() => {
         getUserProfile().then(response => {
@@ -82,18 +83,22 @@ export const ProfilePage = () => {
             <Button onClick={handleLogout} variant={"filled"} color={"gray"}>Wyloguj się</Button>
 
             {/* Wyświetlanie ulubionych ogłoszeń*/}
-            <h2>Ulubione Listingi</h2>
-            {listings.length > 0 ? (
-                listings.map(listing => (
-                    <CarListItem
-                        key={listing._id}
-                        {...listing}
-                        onToggleFavorite={toggleFavorite}
-                    />
-                ))
+            <h2>Polubione ogłoszenia</h2>
+
+            {Array.isArray(listings) && listings.length > 0 ? (
+                <SimpleGrid cols={3} spacing="lg" mt="lg">
+                    {listings.map(listing => (
+                        <CarListItem
+                            key={listing._id}
+                            {...listing}
+                            onToggleFavorite={toggleFavorite}
+                        />
+                    ))}
+                </SimpleGrid>
             ) : (
-                <p>Nie masz ulubionych ogłoszeń.</p>
+                <p>Nie masz jeszcze polubionych ogłoszeń.</p>
             )}
+
         </div>
     );
 };
