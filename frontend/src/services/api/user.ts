@@ -62,4 +62,27 @@ const getUserFavoriteListings = async ():  Promise<ListingResponse> => {
     }
 };
 
-export { getUserProfile, getUserFavoriteListings };
+const getUserListings = async (): Promise<ListingResponse> => {
+    const API_URL = "http://localhost:8080/api/user/listings"; // Zmień na odpowiedni URL backendu
+    const token = sessionStorage.getItem('authToken'); // Pobieranie tokena z sessionStorage
+
+    try {
+        const response = await fetch(API_URL, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Nie udało się pobrać listingów użytkownika');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching user listings:', error);
+        throw error;
+    }
+};
+
+
+export { getUserProfile, getUserFavoriteListings, getUserListings };

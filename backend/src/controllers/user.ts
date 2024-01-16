@@ -166,7 +166,51 @@ const userController = {
                 },
             });
         }
+    },
+
+    getUserListings: async (req: Request, res: Response, next: NextFunction) => {
+        const userId = (req as any).user._id; // Pobranie ID użytkownika z zapytania
+
+        try {
+            const user = await User.findById(userId).populate({
+                path: 'listings',
+                populate: {
+                    path: 'car.brand',
+                    model: 'Brand'
+                }
+            });
+
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    error: {
+                        code: 404,
+                        message: 'User not found',
+                    },
+                });
+            }
+
+            const userListings = user.listings; // Zakładając, że 'userListings' to pole w modelu User
+
+            return res.status(200).json({
+                success: true,
+                data: {
+                    listings: userListings
+                },
+            });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                success: false,
+                error: {
+                    code: 500,
+                    message: 'Internal Server Error',
+                },
+            });
+        }
     }
+
+
 }
 
 const generateJWTToken = (user: IUser) => {

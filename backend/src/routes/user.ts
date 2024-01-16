@@ -28,5 +28,7 @@ userRouter.get('/user', authMiddleware, userController.getLoggedInUser);
 
 userRouter.get("/user/favourites", authMiddleware, userController.getUserFavouriteListings);
 
+userRouter.get("/user/listings", authMiddleware, userController.getUserListings);
+
 
 export default userRouter;

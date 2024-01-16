@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import {Button, SimpleGrid} from '@mantine/core';
-import {getUserFavoriteListings, getUserProfile, UserProfile, UserProfileResponse} from "../services/api/user";
+import {
+    getUserFavoriteListings,
+    getUserListings,
+    getUserProfile,
+    UserProfile,
+    UserProfileResponse
+} from "../services/api/user";
 import {addToFavorites, getListings, Listing, removeFromFavorites} from "../services/api/listing";
 import {CarListItem, CarListItemListing} from "../hooks/CarListItem";
 
@@ -10,7 +16,7 @@ export const ProfilePage = () => {
     const [userData, setUserData] = useState<UserProfile | null>(null);
     const [listings, setListings] = useState<CarListItemListing[]>([]);
     const currentUserId = sessionStorage.getItem('currentUserId');
-    const [userListings, setUserListings] = useState([]);
+    const [userListings, setUserListings] = useState<CarListItemListing[]>([]);
 
     useEffect(() => {
         getUserProfile().then(response => {
@@ -20,6 +26,24 @@ export const ProfilePage = () => {
         }).catch(error => {
             console.error('Błąd podczas pobierania danych usera:', error);
         })
+
+        getUserListings().then(response => {
+            const newUserListings = response.data.listings.map(listing =>{
+                return {
+                _id: listing._id,
+                title: listing.title,
+                brand: listing.car.brand.name,
+                model: listing.car.carModel,
+                year: listing.car.year,
+                mileage: listing.car.mileage,
+                price: listing.car.price,
+                isFavorited: listing.likedByUsers.some(user => user._id === currentUserId)
+            }
+            setUserListings(newUserListings)});
+        }).catch(error => {
+            console.error("Błąd podczas pobierania ogłoszeń użytkownika:", error);
+        });
+
 
         getUserFavoriteListings().then(response => {
             if (response.success) {
@@ -97,6 +121,22 @@ export const ProfilePage = () => {
                 </SimpleGrid>
             ) : (
                 <p>Nie masz jeszcze polubionych ogłoszeń.</p>
+            )}
+
+            <h2>Twoje ogłoszenia</h2>
+
+            {userListings.length > 0 ? (
+                <SimpleGrid cols={3} spacing="lg" mt="lg">
+                    {userListings.map(listing => (
+                        <CarListItem
+                            key={listing._id}
+                            {...listing}
+                            onToggleFavorite={toggleFavorite}
+                        />
+                    ))}
+                </SimpleGrid>
+            ) : (
+                <p>Nie dodałeś(aś) jeszcze żadnych ogłoszeń.</p>
             )}
 
         </div>

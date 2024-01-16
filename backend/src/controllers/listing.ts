@@ -68,6 +68,12 @@ const listingController = {
             // Zapisanie nowego listingu
             await newListing.save();
 
+            // Aktualizacja listingu w profilu użytkownika
+            await User.findByIdAndUpdate(sellerId, {
+                $push: { listings: newListing._id } // Dodanie ID listingu do tablicy listings użytkownika
+            });
+
+
             res.status(201).json({
                 success: true,
                 data: {
