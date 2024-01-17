@@ -169,7 +169,7 @@ const userController = {
     },
 
     getUserListings: async (req: Request, res: Response, next: NextFunction) => {
-        const userId = (req as any).user._id; // Pobranie ID użytkownika z zapytania
+        const userId = (req as any).user._id;
 
         try {
             const user = await User.findById(userId).populate({
@@ -190,7 +190,7 @@ const userController = {
                 });
             }
 
-            const userListings = user.listings; // Zakładając, że 'userListings' to pole w modelu User
+            const userListings = user.listings;
 
             return res.status(200).json({
                 success: true,
@@ -209,8 +209,6 @@ const userController = {
             });
         }
     }
-
-
 }
 
 const generateJWTToken = (user: IUser) => {

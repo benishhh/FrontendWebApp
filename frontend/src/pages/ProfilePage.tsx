@@ -6,17 +6,18 @@ import {
     getUserListings,
     getUserProfile,
     UserProfile,
-    UserProfileResponse
 } from "../services/api/user";
 import {addToFavorites, getListings, Listing, removeFromFavorites} from "../services/api/listing";
-import {CarListItem, CarListItemListing} from "../hooks/CarListItem";
+import {CarListItem, CarListItemListing} from "./CarListItem";
 
 export const ProfilePage = () => {
     const navigate = useNavigate();
+
     const [userData, setUserData] = useState<UserProfile | null>(null);
-    const [listings, setListings] = useState<CarListItemListing[]>([]);
-    const currentUserId = sessionStorage.getItem('currentUserId');
+    const [favoriteListings, setFavoriteListings] = useState<CarListItemListing[]>([]);
     const [userListings, setUserListings] = useState<CarListItemListing[]>([]);
+
+    const currentUserId = sessionStorage.getItem('currentUserId');
 
     useEffect(() => {
         getUserProfile().then(response => {
@@ -28,22 +29,25 @@ export const ProfilePage = () => {
         })
 
         getUserListings().then(response => {
-            const newUserListings = response.data.listings.map(listing =>{
-                return {
-                _id: listing._id,
-                title: listing.title,
-                brand: listing.car.brand.name,
-                model: listing.car.carModel,
-                year: listing.car.year,
-                mileage: listing.car.mileage,
-                price: listing.car.price,
-                isFavorited: listing.likedByUsers.some(user => user._id === currentUserId)
+            if (response.success) {
+                const newCarListItemListings = response.data.listings.map(listing =>{
+                    return {
+                        _id: listing._id,
+                        title: listing.title,
+                        brand: listing.car.brand.name,
+                        model: listing.car.carModel,
+                        year: listing.car.year,
+                        mileage: listing.car.mileage,
+                        price: listing.car.price,
+                        imageUrl: listing.imageUrl,
+                        isFavorited: listing.likedByUsers.some(user => user._id === currentUserId)
+                    }
+                })
+                setUserListings(newCarListItemListings);
             }
-            setUserListings(newUserListings)});
         }).catch(error => {
-            console.error("Błąd podczas pobierania ogłoszeń użytkownika:", error);
+            console.error('Błąd podczas pobierania listingów:', error);
         });
-
 
         getUserFavoriteListings().then(response => {
             if (response.success) {
@@ -56,10 +60,11 @@ export const ProfilePage = () => {
                         year: listing.car.year,
                         mileage: listing.car.mileage,
                         price: listing.car.price,
+                        imageUrl: listing.imageUrl,
                         isFavorited: listing.likedByUsers.some(user => user._id === currentUserId)
                     }
                 })
-                setListings(newCarListItemListings);
+                setFavoriteListings(newCarListItemListings);
             }
         }).catch(error => {
             console.error('Błąd podczas pobierania listingów:', error);
@@ -68,7 +73,7 @@ export const ProfilePage = () => {
 
     const toggleFavorite = async (listingId: string) => {
         try {
-            const listingToUpdate = listings.find(listing => listing._id === listingId);
+            const listingToUpdate = favoriteListings.find(listing => listing._id === listingId);
             if (listingToUpdate) {
                 if (listingToUpdate.isFavorited) {
                     await removeFromFavorites(listingId);
@@ -76,11 +81,11 @@ export const ProfilePage = () => {
                     await addToFavorites(listingId);
                 }
 
-                const updatedListings = listings.map(listing =>
+                const updatedListings = favoriteListings.map(listing =>
                     listing._id === listingId ? {...listing, isFavorited: !listing.isFavorited} : listing
                 );
 
-                setListings(updatedListings);
+                setFavoriteListings(updatedListings);
             }
         } catch (error) {
             console.error('Błąd przy zmianie stanu ulubionych:', error);
@@ -109,9 +114,9 @@ export const ProfilePage = () => {
             {/* Wyświetlanie ulubionych ogłoszeń*/}
             <h2>Polubione ogłoszenia</h2>
 
-            {Array.isArray(listings) && listings.length > 0 ? (
+            {Array.isArray(favoriteListings) && favoriteListings.length > 0 ? (
                 <SimpleGrid cols={3} spacing="lg" mt="lg">
-                    {listings.map(listing => (
+                    {favoriteListings.map(listing => (
                         <CarListItem
                             key={listing._id}
                             {...listing}

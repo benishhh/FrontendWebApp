@@ -1,6 +1,6 @@
 // services/userService.js
 
-import {ListingResponse} from "./listing";
+import {ListingsResponse} from "./listing";
 
 export interface UserProfile {
     _id: string;
@@ -40,7 +40,7 @@ const getUserProfile = async (): Promise<UserProfileResponse> => {
     }
 };
 
-const getUserFavoriteListings = async ():  Promise<ListingResponse> => {
+const getUserFavoriteListings = async ():  Promise<ListingsResponse> => {
     const API_URL = "http://localhost:8080/api/user/favourites"; // Zmień na odpowiedni URL backendu
     const token = sessionStorage.getItem('authToken'); // Pobieranie tokena z sessionStorage
 
@@ -62,9 +62,9 @@ const getUserFavoriteListings = async ():  Promise<ListingResponse> => {
     }
 };
 
-const getUserListings = async (): Promise<ListingResponse> => {
-    const API_URL = "http://localhost:8080/api/user/listings"; // Zmień na odpowiedni URL backendu
-    const token = sessionStorage.getItem('authToken'); // Pobieranie tokena z sessionStorage
+const getUserListings = async (): Promise<ListingsResponse> => {
+    const API_URL = "http://localhost:8080/api/user/listings";
+    const token = sessionStorage.getItem('authToken');
 
     try {
         const response = await fetch(API_URL, {

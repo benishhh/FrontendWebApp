@@ -26,15 +26,23 @@ export interface Listing {
     title: string;
     description: string;
     car: CarDetails;
+    imageUrl: string;
     seller: User;
     likedByUsers: User[];
     __v: number;
 }
 
-export interface ListingResponse {
+export interface ListingsResponse {
     success: boolean;
     data: {
         listings: Listing[];
+    };
+}
+
+export interface  ListingResponse {
+    success: boolean;
+    data: {
+        listing: Listing
     };
 }
 
@@ -43,7 +51,7 @@ export interface ListingToAdd {
     description: string;
 }
 
-const getListings = async (): Promise<ListingResponse> => {
+const getListings = async (): Promise<ListingsResponse> => {
     const API_URL = "http://localhost:8080/api/listings"; // Zmień na odpowiedni URL backendu
     const token = sessionStorage.getItem('authToken'); // Pobieranie tokena z sessionStorage
 
@@ -102,15 +110,15 @@ const removeFromFavorites = async (listingId: string): Promise<any> => {
 // services/listingService.js
 
 export const addListing = async (listingData: ListingFormData) => {
-    const API_URL = 'http://localhost:8080/api/listings'; // Zmień na odpowiedni URL backendu
-    const token = sessionStorage.getItem('authToken'); // Pobieranie tokena z sessionStorage
+    const API_URL = 'http://localhost:8080/api/listings';
+    const token = sessionStorage.getItem('authToken');
 
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Upewnij się, że token jest dodawany do nagłówka, jeśli jest wymagany
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(listingData)
         });
@@ -127,5 +135,28 @@ export const addListing = async (listingData: ListingFormData) => {
     }
 };
 
+const getListingById = async (listingId: string): Promise<ListingResponse> => {
+    const API_URL = `http://localhost:8080/api/listings/${listingId}`;
+    const token = sessionStorage.getItem('authToken'); // Jeśli wymagana jest autoryzacja
 
-export { addToFavorites, removeFromFavorites, getListings };
+    try {
+        const response = await fetch(API_URL, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}` // Dodaj nagłówek, jeśli jest wymagany
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Nie udało się pobrać danych listingu');
+        }
+
+        const data: ListingResponse = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching listing:', error);
+        throw error;
+    }
+};
+
+export { addToFavorites, removeFromFavorites, getListings, getListingById };

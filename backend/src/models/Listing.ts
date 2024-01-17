@@ -12,6 +12,7 @@ export interface IListing extends Document {
         engineSize: number;
         price: number;
     };
+    imageUrl: string;
     seller: mongoose.Types.ObjectId;
     likedByUsers: mongoose.Types.ObjectId[];
 }
@@ -28,6 +29,7 @@ const listingSchema: Schema<IListing> = new Schema({
         engineSize: { type: Number, required: true },
         price: { type: Number, required: true },
     },
+    imageUrl: { type: String, required: false },
     seller: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
     likedByUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 });

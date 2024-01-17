@@ -31,12 +31,15 @@ listingRouter.post('',
                 throw new Error('Invalid Brand ID');
             }
             return true;
-        })
+        }),
+        body('imageUrl', 'Image URL is invalid').isString()
     ],
     authMiddleware,
     listingController.addListing);
 
-listingRouter.delete('/:id/likes', authMiddleware, listingController.deleteListing)
+listingRouter.get('/:id', listingController.getListing);
+
+listingRouter.delete('/:id/likes', authMiddleware, listingController.removeFromFavorites);
 
 listingRouter.post('/:id/likes', authMiddleware, listingController.addToFavorites);
 export default listingRouter;

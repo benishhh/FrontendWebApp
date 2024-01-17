@@ -31,12 +31,12 @@ const listingController = {
             carEngineSize,
             carPrice,
             brandId,
+            imageUrl,
         } = req.body;
 
         const sellerId = (req as any).user._id;
 
         try {
-            // Sprawdź czy Brand istnieje
             const brand = await Brand.findById(brandId);
             if (!brand) {
                 return res.status(404).json({
@@ -61,6 +61,7 @@ const listingController = {
                     engineSize: carEngineSize,
                     price: carPrice,
                 },
+                imageUrl: imageUrl,
                 seller: sellerId,
                 likedByUsers: [],
             });
@@ -214,16 +215,52 @@ const listingController = {
 
     removeFromFavorites: async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const listingId = req.params.listingId;
+            const listingId = req.params.id;
             const userId = (req as any).user._id;
 
-            await User.findByIdAndUpdate(userId, { $pull: { favoriteListings: listingId } });
-            await Listing.findByIdAndUpdate(listingId, { $pull: { likedByUsers: userId } });
+            const listingObjectId = new mongoose.Types.ObjectId(listingId);
+            const userObjectId = new mongoose.Types.ObjectId(userId);
+
+            await User.findByIdAndUpdate(userId, { $pull: { likedListings: listingObjectId } });
+            await Listing.findByIdAndUpdate(listingId, { $pull: { likedByUsers: userObjectId } });
 
             return res.status(200).json({
                 success: true,
                 data: {
                     message: 'Listing removed from favorites',
+                },
+            });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                success: false,
+                error: {
+                    code: 500,
+                    message: 'Internal Server Error',
+                },
+            });
+        }
+    },
+
+    getListing: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const listingId = req.params.id;
+            const listing = await Listing.findById(listingId).populate('car.brand', 'name').populate('seller', 'username');
+
+            if (!listing) {
+                return res.status(404).json({
+                    success: false,
+                    error: {
+                        code: 404,
+                        message: 'Listing not found',
+                    },
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                data: {
+                    listing: listing
                 },
             });
         } catch (error) {

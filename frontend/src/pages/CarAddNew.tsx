@@ -28,7 +28,7 @@ const validationSchema = yup.object({
     carEngineType: yup.string().required('Typ silnika jest wymagany'),
     carEngineSize: yup.number().required('Pojemność silnika jest wymagana').min(0, 'Pojemność silnika nie może być ujemna'),
     carPrice: yup.number().required('Cena jest wymagana').min(0, 'Cena nie może być ujemna'),
-    imageUrl: yup.string().url('Nieprawidłowy URL do zdjęcia').required('URL zdjęcia jest wymagany'),
+    imageUrl: yup.string(),
     // sellerId: yup.string().required('Identyfikator sprzedawcy jest wymagany'), // Tutaj dodaj walidację, jeśli masz już logikę przypisywania sellerId
     // brandId: yup.string().required('Identyfikator marki jest wymagany'), // Walidacja dla brandId, jeśli to pole jest wymagane
 });

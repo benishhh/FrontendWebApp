@@ -1,6 +1,6 @@
 import {addToFavorites, getListings, removeFromFavorites} from "../services/api/listing";
 import React, {useEffect, useState} from "react";
-import {CarListItem, CarListItemListing} from "../hooks/CarListItem";
+import {CarListItem, CarListItemListing} from "./CarListItem";
 import {SimpleGrid} from "@mantine/core";
 
 export const CarListPage = () => {
@@ -19,6 +19,7 @@ export const CarListPage = () => {
                         year: listing.car.year,
                         mileage: listing.car.mileage,
                         price: listing.car.price,
+                        imageUrl: listing.imageUrl,
                         isFavorited: listing.likedByUsers.some(user => user._id === currentUserId)
                     }
                 })
