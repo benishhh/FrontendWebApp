@@ -101,10 +101,10 @@ const userController = {
             const user = await User.findById((req as any).user._id).select('-password'); // Nie zwracamy hasła
 
             if (!user) {
-                return res.status(404).json({
+                return res.status(400).json({
                     success: false,
                     error: {
-                        code: 404,
+                        code: 400,
                         message: 'User not found',
                     }
                 });
@@ -181,10 +181,10 @@ const userController = {
             });
 
             if (!user) {
-                return res.status(404).json({
+                return res.status(400).json({
                     success: false,
                     error: {
-                        code: 404,
+                        code: 400,
                         message: 'User not found',
                     },
                 });

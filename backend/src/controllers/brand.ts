@@ -46,10 +46,10 @@ const brandController = {
             const brand = await Brand.findById(brandId);
 
             if (!brand) {
-                return res.status(404).json({
+                return res.status(400).json({
                     success: false,
                     error: {
-                        code: 404,
+                        code: 400,
                         message: 'Brand not found',
                     },
                 });
@@ -117,10 +117,10 @@ const brandController = {
         try {
             const brandToDelete = await Brand.findById(brandId);
             if (!brandToDelete) {
-                return res.status(404).json({
+                return res.status(400).json({
                     success: false,
                     error: {
-                        code: 404,
+                        code: 400,
                         message: 'Brand not found',
                     },
                 });
@@ -128,7 +128,7 @@ const brandController = {
 
             await brandToDelete.deleteOne();
 
-            return res.status(200).json({
+            return res.status(204).json({
                 success: true,
                 data: {message: 'Brand deleted successfully' },
             });
@@ -162,10 +162,10 @@ const brandController = {
         try {
             const brandToUpdate = await Brand.findById(brandId);
             if (!brandToUpdate) {
-                return res.status(404).json({
+                return res.status(400).json({
                     success: false,
                     error: {
-                        code: 404,
+                        code: 400,
                         message: 'Brand not found',
                     },
                 });
@@ -211,10 +211,10 @@ const brandController = {
         try {
             const brandToUpdate = await Brand.findById(brandId);
             if (!brandToUpdate) {
-                return res.status(404).json({
+                return res.status(400).json({
                     success: false,
                     error: {
-                        code: 404,
+                        code: 400,
                         message: 'Brand not found',
                     },
                 });
@@ -269,10 +269,10 @@ const brandController = {
         try {
             const brandToUpdate = await Brand.findById(brandId);
             if (!brandToUpdate) {
-                return res.status(404).json({
+                return res.status(400).json({
                     success: false,
                     error: {
-                        code: 404,
+                        code: 400,
                         message: 'Brand not found',
                     },
                 });

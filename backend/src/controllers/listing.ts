@@ -39,10 +39,10 @@ const listingController = {
         try {
             const brand = await Brand.findById(brandId);
             if (!brand) {
-                return res.status(404).json({
+                return res.status(400).json({
                     success: false,
                     error: {
-                        code: 404,
+                        code: 400,
                         message: 'Brand not found',
                     },
                 });
@@ -100,10 +100,10 @@ const listingController = {
             const listingToDelete = await Listing.findById(listingId);
 
             if (!listingToDelete) {
-                return res.status(404).json({
+                return res.status(400).json({
                     success: false,
                     error: {
-                        code: 404,
+                        code: 400,
                         message: 'Listing not found',
                     },
                 });
@@ -248,10 +248,10 @@ const listingController = {
             const listing = await Listing.findById(listingId).populate('car.brand', 'name').populate('seller', 'username');
 
             if (!listing) {
-                return res.status(404).json({
+                return res.status(400).json({
                     success: false,
                     error: {
-                        code: 404,
+                        code: 400,
                         message: 'Listing not found',
                     },
                 });
