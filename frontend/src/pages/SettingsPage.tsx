@@ -1,26 +1,24 @@
- import React from 'react';
-// import { Switch } from '@mantine/core';
-// // import {useTheme} from "../hooks/useTheme";
+import React from 'react';
+import { Button } from '@mantine/core';
+
+
+// interface SettingsPageProps {
+//     toggleColorScheme: () => void;
+// }
 //
-// export const SettingsPage = () => {
-//     // const { theme, toggleTheme } = useTheme();
-//
+// export const SettingsPage: React.FC<SettingsPageProps> = ({ toggleColorScheme }) => {
 //     return (
 //         <div>
-//             <Switch
-//                 checked={theme === 'dark'}
-//                 label="Tryb nocny"
-//                 onChange={toggleTheme}
-//             />
-//             {/* Reszta ustawień */}
+//             <h1>Ustawienia</h1>
+//             <Button onClick={() => toggleColorScheme()}>
+//                 Przełącz tryb nocny/dzienny
+//             </Button>
 //         </div>
 //     );
 // };
-//
-// export default SettingsPage;
-
-
 
 export const SettingsPage = () => {
-    return <div>WRRR</div>;
+    return(<h1>Ustawienia</h1>)
 }
+
+
