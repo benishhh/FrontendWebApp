@@ -45,7 +45,7 @@ const routes: RouteObject[] = [
                 element: <SettingsPage/>
             },
             {
-                path: '/moto/car/:carId', // Dodana ścieżka do szczegółów ogłoszenia
+                path: '/moto/car/:carId',
                 element: <CarDetailsPage/>
             },
             {
