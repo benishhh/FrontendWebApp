@@ -2,16 +2,27 @@ import {addToFavorites, getListings, removeFromFavorites} from "../services/api/
 import React, {useEffect, useState} from "react";
 import {CarListItem, CarListItemListing} from "./CarListItem";
 import {Button, Group, Select, SimpleGrid} from "@mantine/core";
+import {getBrands} from "../services/api/brand";
 
 export const CarListPage = () => {
     const [listings, setListings] = useState<CarListItemListing[]>([]);
     const currentUserId = sessionStorage.getItem('currentUserId');
+    const [brands, setBrands] = useState<{ value: string; label: string; models: string[] }[]>([]);
 
-    const [selectedBrand, setSelectedBrand] = useState('');
-    const [selectedEngineType, setSelectedEngineType] = useState('');
+    const [selectedBrand, setSelectedBrand] = useState<string | null>('');
+    //const [selectedEngineType, setSelectedEngineType] = useState('');
 
 
-
+    useEffect(() => {
+        getBrands().then(response => {
+            const brandOptions = response.data.brands.map(brand => ({
+                value: brand._id,
+                label: brand.name,
+                models: brand.carModels,
+            }));
+            setBrands(brandOptions);
+        });
+    }, []);
 
     useEffect(() => {
         getListings().then(response => {
@@ -64,42 +75,43 @@ export const CarListPage = () => {
 
     return (
         <div>
-            <form>
-                <label>
-                    Marka:
-                    <select value={selectedBrand} onChange={e => setSelectedBrand(e.target.value)}>
-                        <option value="">Wszystkie</option>
-                        <option value="BMW">BMW</option>
-                        <option value="Toyota">Toyota</option>
-                        <option value="Audi">Audi</option>
-                        <option value="Volvo">Volvo</option>
-                        <option value="Mercedes-Benz">Mercedes-Benz</option>
-                        <option value="Hyundai">Hyundai</option>
-                        <option value="Ford">Ford</option>
-                        <option value="Mazda">Mazda</option>
-                    </select>
-                </label>
-            </form>
             {/*<form>*/}
-            {/*    <Group>*/}
-            {/*        <Select*/}
-            {/*            label="Marka"*/}
-            {/*            placeholder="Wybierz markę"*/}
-            {/*            value={selectedBrand}*/}
-            {/*            onChange={(value) => setSelectedBrand(value)}*/}
-            {/*            data={[*/}
-            {/*                { value: '', label: 'Wszystkie' },*/}
-            {/*                { value: 'BMW', label: 'BMW' },*/}
-            {/*                // Dodaj więcej marek*/}
-            {/*            ]}*/}
-            {/*        />*/}
-
-            {/*        /!* Możesz dodać przycisk do resetowania filtrów, jeśli to potrzebne *!/*/}
-            {/*        <Button onClick={() => { setSelectedBrand(''); setSelectedEngineType(''); }}>*/}
-            {/*            Wyczyść filtry*/}
-            {/*        </Button>*/}
-            {/*    </Group>*/}
+            {/*    <label>*/}
+            {/*        Marka:*/}
+            {/*        <select value={selectedBrand} onChange={e => setSelectedBrand(e.target.value)}>*/}
+            {/*            <option value="">Wszystkie</option>*/}
+            {/*            <option value="BMW">BMW</option>*/}
+            {/*            <option value="Toyota">Toyota</option>*/}
+            {/*            <option value="Audi">Audi</option>*/}
+            {/*            <option value="Volvo">Volvo</option>*/}
+            {/*            <option value="Mercedes-Benz">Mercedes-Benz</option>*/}
+            {/*            <option value="Hyundai">Hyundai</option>*/}
+            {/*            <option value="Ford">Ford</option>*/}
+            {/*            <option value="Mazda">Mazda</option>*/}
+            {/*        </select>*/}
+            {/*    </label>*/}
             {/*</form>*/}
+            <form>
+                <Group>
+                    <Select
+                        label="Marka"
+                        placeholder="Wybierz markę"
+                        value={selectedBrand}
+                        onChange={(e) => { setSelectedBrand(e); console.log(e)} }
+                        data={brands.map(brand => ({ value: brand.label, label: brand.label }))}
+                        // data={[
+                        //     { value: '', label: 'Wszystkie' },
+                        //     { value: 'BMW', label: 'BMW' },
+                        //     // Dodaj więcej marek
+                        // ]}
+                    />
+
+                    {/* Możesz dodać przycisk do resetowania filtrów, jeśli to potrzebne */}
+                    <Button onClick={() => { setSelectedBrand(''); }}>
+                        Wyczyść filtry
+                    </Button>
+                </Group>
+            </form>
 
         <SimpleGrid cols={3} spacing="lg" mt="lg">
             {Array.isArray(filteredListings) && filteredListings.map(listing => (

@@ -1,9 +1,7 @@
 import { LoginPage } from "./LoginPage";
 import { render, screen, fireEvent } from '../test-utils/testing-utils';
 import '@testing-library/jest-dom/extend-expect';
-import { BrowserRouter } from 'react-router-dom';
-import {act} from "react-dom/test-utils";
-import {getByPlaceholderText} from "@testing-library/react";
+
 
 window.matchMedia = window.matchMedia || function() {
     return {
@@ -41,10 +39,9 @@ const mockLoginSuccess = () => {
 };
 
 const mockLoginFailure = () => {
-    (global.fetch as jest.Mock).mockResolvedValue({
-        ok: false,
-        json: () => Promise.resolve({ error: { message: 'Invalid credentials' } }),
-    });
+    (global.fetch as jest.Mock).mockImplementationOnce(() =>
+        Promise.reject(new Error('Invalid credentials'))
+    );
 };
 
 const mockedUsedNavigate = jest.fn();
@@ -53,7 +50,18 @@ jest.mock('react-router-dom', () => ({
     useNavigate: () => mockedUsedNavigate,
 }))
 
+beforeAll(() => {
+    global.alert = jest.fn() as jest.Mock;
+    global.fetch = jest.fn() as jest.Mock;
+});
+
+afterAll(() => {
+    (global.fetch as jest.Mock).mockRestore();
+    (global.alert as jest.Mock).mockRestore();
+});
+
 describe("Login form", () => {
+
     test('updates email and password inputs correctly', () => {
         render(<LoginPage />);
 
