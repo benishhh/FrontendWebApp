@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import {Button, Container, Paper, PasswordInput, TextInput, Title} from "@mantine/core";
 import {useNavigate} from "react-router-dom";
 import {registerUser} from "../services/api/register";
-import {registerErrorNotification, registerSuccessfulNotification} from "../services/api/notifications";
+import { registerErrorNotification, registerSuccessfulNotification } from "../services/api/notifications";
 
 const validationSchema = yup.object({
     username: yup.string().required('Username is required'),
@@ -38,11 +38,15 @@ export const RegisterPage = () => {
         onSubmit: async (values) => {
             const { confirmPassword, ...userData } = values;
             try {
+                console.log("PRZED WYSLANIU")
                 await registerUser(userData); // Wywołanie serwisu rejestracji
-                registerSuccessfulNotification();
-               // navigate('/moto/login'); // Przekierowanie po pomyślnej rejestracji
+                console.log("PO WYSLANIU")
+                alert("Pomyślnie zarejestrowano!")
+                //registerSuccessfulNotification();
+                navigate('/moto/login'); // Przekierowanie po pomyślnej rejestracji
             } catch (error) {
-                registerErrorNotification(); // Obsługa błędów
+                alert("Niepowodzenie rejestracji")
+                //registerErrorNotification(); // Obsługa błędów
             }
         },
     });

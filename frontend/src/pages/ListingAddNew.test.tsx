@@ -1,6 +1,3 @@
-// Na początku pliku testowego, przed importami
-import {within} from "@testing-library/react";
-
 jest.mock("../services/api/brand", () => ({
     getBrands: jest.fn(),
 }));

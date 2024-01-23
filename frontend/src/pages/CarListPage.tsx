@@ -75,22 +75,6 @@ export const CarListPage = () => {
 
     return (
         <div>
-            {/*<form>*/}
-            {/*    <label>*/}
-            {/*        Marka:*/}
-            {/*        <select value={selectedBrand} onChange={e => setSelectedBrand(e.target.value)}>*/}
-            {/*            <option value="">Wszystkie</option>*/}
-            {/*            <option value="BMW">BMW</option>*/}
-            {/*            <option value="Toyota">Toyota</option>*/}
-            {/*            <option value="Audi">Audi</option>*/}
-            {/*            <option value="Volvo">Volvo</option>*/}
-            {/*            <option value="Mercedes-Benz">Mercedes-Benz</option>*/}
-            {/*            <option value="Hyundai">Hyundai</option>*/}
-            {/*            <option value="Ford">Ford</option>*/}
-            {/*            <option value="Mazda">Mazda</option>*/}
-            {/*        </select>*/}
-            {/*    </label>*/}
-            {/*</form>*/}
             <form>
                 <Group>
                     <Select
@@ -99,14 +83,7 @@ export const CarListPage = () => {
                         value={selectedBrand}
                         onChange={(e) => { setSelectedBrand(e); console.log(e)} }
                         data={brands.map(brand => ({ value: brand.label, label: brand.label }))}
-                        // data={[
-                        //     { value: '', label: 'Wszystkie' },
-                        //     { value: 'BMW', label: 'BMW' },
-                        //     // Dodaj więcej marek
-                        // ]}
                     />
-
-                    {/* Możesz dodać przycisk do resetowania filtrów, jeśli to potrzebne */}
                     <Button onClick={() => { setSelectedBrand(''); }}>
                         Wyczyść filtry
                     </Button>

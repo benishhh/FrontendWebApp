@@ -32,7 +32,7 @@ export const CarListItem = ({_id, title, brand, model, year, mileage, price, ima
 
 
     return (
-        <Card shadow="sm" p="lg" radius="md" onClick={navigateToCarDetails}>
+        <Card shadow="sm" p="lg" radius="md" onClick={navigateToCarDetails} data-testid="car-card">
             <Card.Section>
                 <Image src={imageUrl} alt={title} height={210} />
             </Card.Section>

@@ -95,7 +95,6 @@ export const ProfilePage = () => {
     const handleLogout = () => {
         sessionStorage.removeItem('authToken'); // Usuwanie tokena z sessionStorage
         sessionStorage.removeItem('currentUserId'); // Usuwanie tokena z sessionStorage
-        localStorage.removeItem('isLoggedIn');
 
         navigate('/moto/login');
     };
@@ -109,7 +108,7 @@ export const ProfilePage = () => {
             <h1>Profil Użytkownika</h1>
             <p>Nazwa użytkownika: {userData.username}</p>
             <p>Email: {userData.email}</p>
-            <Button onClick={handleLogout} variant={"filled"} color={"gray"}>Wyloguj się</Button>
+            <Button onClick={handleLogout} variant={"filled"} color={"gray"} data-testid="logout-button">Wyloguj się</Button>
 
             {/* Wyświetlanie ulubionych ogłoszeń*/}
             <h2>Polubione ogłoszenia</h2>
