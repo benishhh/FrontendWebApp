@@ -28,12 +28,12 @@ export const LoginPage = () => {
                 // Zapisanie tokena JWT
                 sessionStorage.setItem('authToken', response.data.token);
                 sessionStorage.setItem('currentUserId', response.data.user._id);
+
                 navigate('/moto/profile'); // Przekierowanie do strony profilu
             } catch (error) {
                 alert('Nieprawidłowy email lub hasło');
             }
         },
-
     });
 
     return (
@@ -49,6 +49,7 @@ export const LoginPage = () => {
                         id="email"
                         name="email"
                         type="email"
+                        data-testid="email-input"
                         value={formik.values.email}
                         onChange={formik.handleChange}
                         error={formik.touched.email && formik.errors.email}
@@ -60,6 +61,7 @@ export const LoginPage = () => {
                         placeholder="Your password"
                         id="password"
                         name="password"
+                        data-testid="password-input"
                         value={formik.values.password}
                         onChange={formik.handleChange}
                         error={formik.touched.password && formik.errors.password}

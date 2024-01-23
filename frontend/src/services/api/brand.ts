@@ -1,13 +1,13 @@
 import {bool} from "yup";
-
+interface  brand {
+    _id: string,
+    name: string,
+    carModels: string[]
+}
 export interface brandResponse {
     success: boolean;
     data: {
-        brands: [{
-            _id: string,
-            name: string,
-            carModels: string[]
-        }]
+        brands: brand[]
     }
 }
 
@@ -22,6 +22,7 @@ const getBrands = async (): Promise<brandResponse> => {
         if (!response.ok) {
             throw new Error('Nie udało się pobrać marek samochodów');
         }
+        console.log(response);
 
         return await response.json();
     } catch (error) {

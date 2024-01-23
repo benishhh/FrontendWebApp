@@ -29,12 +29,10 @@ const validationSchema = yup.object({
     carEngineSize: yup.number().required('Pojemność silnika jest wymagana').min(0, 'Pojemność silnika nie może być ujemna'),
     carPrice: yup.number().required('Cena jest wymagana').min(0, 'Cena nie może być ujemna'),
     imageUrl: yup.string(),
-    // sellerId: yup.string().required('Identyfikator sprzedawcy jest wymagany'), // Tutaj dodaj walidację, jeśli masz już logikę przypisywania sellerId
-    // brandId: yup.string().required('Identyfikator marki jest wymagany'), // Walidacja dla brandId, jeśli to pole jest wymagane
 });
 
 
-export const CarAddNew = () => {
+export const ListingAddNew = () => {
     const [brands, setBrands] = useState<{ value: string; label: string; models: string[] }[]>([]);
     const [selectedBrand, setSelectedBrand] = useState<string | null>('');
     const [models, setModels] = useState<string[]>([]);
@@ -65,6 +63,8 @@ export const CarAddNew = () => {
                 setIsSubmittedSuccessfully(false);
             }
         },
+        validateOnBlur: true,
+        validateOnChange: true,
     });
 
     useEffect(() => {
@@ -90,14 +90,17 @@ export const CarAddNew = () => {
             <TextInput
                 label="Tytuł"
                 name="title"
+                data-testid="title-input"
                 value={formik.values.title}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 error={formik.touched.title && formik.errors.title ? formik.errors.title : undefined}
                 required
             />
             <Select
                 label="Marka"
                 name="brandId"
+                data-testid="brand-input"
                 value={formik.values.brandId}
                 onChange={(value) => {
                     formik.setFieldValue("brandId", value);
@@ -115,8 +118,10 @@ export const CarAddNew = () => {
             <Select
                 label="Model"
                 name="carModel"
+                data-testid="model-input"
                 value={formik.values.carModel}
                 onChange={(value) => formik.setFieldValue("carModel", value)}
+                onBlur={formik.handleBlur}
                 data={models.map(model => ({ value: model, label: model }))}
                 disabled={!formik.values.brandId}
                 required
@@ -124,16 +129,20 @@ export const CarAddNew = () => {
             <Textarea
                 label="Opis"
                 name="description"
+                data-testid="description-input"
                 value={formik.values.description}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 error={formik.touched.description && formik.errors.description ? formik.errors.description : undefined}
                 required
             />
             <Textarea
                 label="Url do zdjęcia"
                 name="imageUrl"
+                data-testid="url-input"
                 value={formik.values.imageUrl}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 error={formik.touched.imageUrl && formik.errors.imageUrl}
             />
 
@@ -141,8 +150,10 @@ export const CarAddNew = () => {
                 label="Rok produkcji"
                 name="carYear"
                 type="number"
+                data-testid="year-input"
                 value={formik.values.carYear}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 error={formik.touched.carYear && formik.errors.carYear}
                 required
             />
@@ -151,14 +162,17 @@ export const CarAddNew = () => {
                 label="Przebieg (km)"
                 name="carMileage"
                 type="number"
+                data-testid="milage-input"
                 value={formik.values.carMileage}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 error={formik.touched.carMileage && formik.errors.carMileage ? formik.errors.carMileage : undefined}
                 required
             />
             <Select
                 label="Typ silnika"
                 name="carEngineType"
+                data-testid="engineType-input"
                 value={formik.values.carEngineType}
                 onChange={(value) => formik.setFieldValue('carEngineType', value)}
                 onBlur={formik.handleBlur}
@@ -170,8 +184,10 @@ export const CarAddNew = () => {
                 label="Pojemność silnika (cm³)"
                 name="carEngineSize"
                 type="number"
+                data-testid="engineSize-input"
                 value={formik.values.carEngineSize}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 error={formik.touched.carEngineSize && formik.errors.carEngineSize ? formik.errors.carEngineSize : undefined}
                 required
             />
@@ -180,8 +196,10 @@ export const CarAddNew = () => {
                 label="Cena (PLN)"
                 name="carPrice"
                 type="number"
+                data-testid="price-input"
                 value={formik.values.carPrice}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 error={formik.touched.carPrice && formik.errors.carPrice ? formik.errors.carPrice : undefined}
                 required
             />

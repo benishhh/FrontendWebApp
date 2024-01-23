@@ -1,4 +1,4 @@
-import {ListingFormData} from "../../pages/CarAddNew";
+import {ListingFormData} from "../../pages/ListingAddNew";
 
 export interface Brand {
     _id: string;

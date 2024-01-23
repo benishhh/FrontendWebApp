@@ -23,7 +23,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 app.use("/api", userRouter);
 app.use("/api/brands", brandRouter);
-app.use("/api/listings", listingRouter)
+app.use("/api/listings", listingRouter);
 
 //  <----------- Connecting to the database and starting the app to listen ----------->
 const MONGODB_URI = process.env["MONGODB_URI"];

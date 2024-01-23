@@ -11,12 +11,6 @@ export interface IUser extends Document {
     themeMode: 'light' | 'dark';
 }
 
-
-
-
-
-
-
 const userSchema: Schema<IUser> = new Schema({
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },

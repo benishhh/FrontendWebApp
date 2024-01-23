@@ -2,7 +2,7 @@ import {RouteObject, useRoutes} from "react-router-dom";
 import {Layout} from "../components/Layout";
 import {CarListPage} from "../pages/CarListPage";
 import React from "react";
-import {CarAddNew} from "../pages/CarAddNew";
+import {ListingAddNew} from "../pages/ListingAddNew";
 import {ErrorPage} from "../pages/ErrorPage";
 import {LoginPage} from "../pages/LoginPage";
 import {ProfilePage} from "../pages/ProfilePage";
@@ -22,11 +22,11 @@ const routes: RouteObject[] = [
             },
             {
                 path: '/moto/addnew',
-                element: <CarAddNew/>
+                element: <ListingAddNew/>
             },
             // {
             //     path: '/moto/:id',
-            //     element: <CarAddNew/>
+            //     element: <ListingAddNew/>
             // },
             {
                 path: '/moto/login',
