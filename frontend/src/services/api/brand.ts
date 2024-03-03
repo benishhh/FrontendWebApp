@@ -12,7 +12,6 @@ export interface brandResponse {
 }
 
 
-
 const API_URL = 'http://localhost:8080/api/brands';
 
 const getBrands = async (): Promise<brandResponse> => {
@@ -30,5 +29,8 @@ const getBrands = async (): Promise<brandResponse> => {
         throw error;
     }
 };
+
+
+
 
 export { getBrands };
